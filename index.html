@@ -664,23 +664,15 @@
         /* animated collapsible sections */
         .section-collapsible {
             overflow: hidden;
-            max-height: 2000px;
-            opacity: 1;
-            transition: max-height 0.26s ease-in-out,
-            opacity 0.22s ease-in-out,
-            margin-top 0.22s ease-in-out,
-            margin-bottom 0.22s ease-in-out,
-            padding-top 0.22s ease-in-out,
-            padding-bottom 0.22s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.2s ease-out,
+                        opacity 0.16s ease-out;
         }
 
         .section-collapsible.section-collapsed {
-            max-height: 0;
+            max-height: 0 !important;
             opacity: 0;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
         }
 
         .folder-section-wrapper {
@@ -1425,10 +1417,10 @@
                                 class="glyph-chip-value">Heat, Flame, Combustion</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
                                 class="glyph-chip-value">Fire</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Flame, Start Fire</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
                                 class="glyph-chip-value">1× Potency Fire</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
-                                class="glyph-chip-value">Touch Flame, Start Fire</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
                                 class="glyph-chip-value">1/2 Potency Burn/ Turn</span></div>
                     </div>
@@ -1447,15 +1439,13 @@
                     </div>
                     <div class="glyph-card-body">
                         <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
-                                class="glyph-chip-value">Radiance, Vitality</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
-                                class="glyph-chip-value">Living, Healing</span></div>
+                                class="glyph-chip-value">Radiance, Living, Healing</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Heal / Stabilize</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
                                 class="glyph-chip-value">1× Potency healing/THP</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
-                                class="glyph-chip-value">Touch mend / stabilize</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
-                                class="glyph-chip-value">Vitality THP on double</span></div>
+                                class="glyph-chip-value">1/2× Potency Temp HP</span></div>
                     </div>
                 </div>
             </div>
@@ -1472,15 +1462,13 @@
                     </div>
                     <div class="glyph-card-body">
                         <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
-                                class="glyph-chip-value">Kinetic projectile</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
-                                class="glyph-chip-value">Narrow, directed line</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
-                                class="glyph-chip-value">30 ft spell attack</span></div>
+                                class="glyph-chip-value">Physical, Projectile</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
-                                class="glyph-chip-value">Minor kinetic dart</span></div>
+                                class="glyph-chip-value">Launch Projectile Dart</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">30ft Spell Attack</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
-                                class="glyph-chip-value">Stagger (push/prone)</span></div>
+                                class="glyph-chip-value">Stagger (Push/Prone)</span></div>
                     </div>
                 </div>
             </div>
@@ -1497,15 +1485,13 @@
                     </div>
                     <div class="glyph-card-body">
                         <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
-                                class="glyph-chip-value">Concentration, mental hold</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
-                                class="glyph-chip-value">Marks sigil as sustained</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
-                                class="glyph-chip-value">Enables concentration rules</span></div>
+                                class="glyph-chip-value">Concentration, Mental</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
                                 class="glyph-chip-value">Brief focus/awareness boost</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">Enables concentration rules</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
-                                class="glyph-chip-value">None (stabilizer only)</span></div>
+                                class="glyph-chip-value">None</span></div>
                     </div>
                 </div>
             </div>
@@ -1522,15 +1508,13 @@
                     </div>
                     <div class="glyph-card-body">
                         <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
-                                class="glyph-chip-value">Fixation, persistence</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
-                                class="glyph-chip-value">Attaches to place/object</span></div>
+                                class="glyph-chip-value">Time, Fixation, Persistence</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Immovable, Persistent</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
                                 class="glyph-chip-value">Persist effect ~10 min</span></div>
-                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
-                                class="glyph-chip-value">Tiny ward or mark</span></div>
                         <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
-                                class="glyph-chip-value">None (stabilizer only)</span></div>
+                                class="glyph-chip-value">None</span></div>
                     </div>
                 </div>
             </div>
@@ -1651,13 +1635,31 @@
                 h2.classList.add('collapsed');
                 sectionNodes.forEach(function (node) {
                     node.classList.add('section-collapsed');
+                    node.style.maxHeight = '0px';
+                    node.style.opacity = '0';
+                });
+            } else {
+                sectionNodes.forEach(function (node) {
+                    node.classList.remove('section-collapsed');
+                    node.style.maxHeight = node.scrollHeight + 'px';
+                    node.style.opacity = '1';
                 });
             }
 
             h2.addEventListener('click', function () {
                 const collapsed = h2.classList.toggle('collapsed');
                 sectionNodes.forEach(function (node) {
-                    node.classList.toggle('section-collapsed', collapsed);
+                    if (collapsed) {
+                        node.classList.add('section-collapsed');
+                        node.style.maxHeight = '0px';
+                        node.style.opacity = '0';
+                    } else {
+                        node.classList.remove('section-collapsed');
+                        // Force reflow so transition always plays from the current content height
+                        const fullHeight = node.scrollHeight;
+                        node.style.maxHeight = fullHeight + 'px';
+                        node.style.opacity = '1';
+                    }
                 });
 
                 savedState[sectionId] = collapsed;
@@ -1701,11 +1703,26 @@
             if (initiallyCollapsedFolder) {
                 folderHeader.classList.add('collapsed');
                 wrapper.classList.add('section-collapsed');
+                wrapper.style.maxHeight = '0px';
+                wrapper.style.opacity = '0';
+            } else {
+                wrapper.classList.remove('section-collapsed');
+                wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
+                wrapper.style.opacity = '1';
             }
 
             folderHeader.addEventListener('click', function () {
                 const collapsed = folderHeader.classList.toggle('collapsed');
-                wrapper.classList.toggle('section-collapsed', collapsed);
+                if (collapsed) {
+                    wrapper.classList.add('section-collapsed');
+                    wrapper.style.maxHeight = '0px';
+                    wrapper.style.opacity = '0';
+                } else {
+                    wrapper.classList.remove('section-collapsed');
+                    const fullHeight = wrapper.scrollHeight;
+                    wrapper.style.maxHeight = fullHeight + 'px';
+                    wrapper.style.opacity = '1';
+                }
 
                 savedState[folderId] = collapsed;
                 try {
