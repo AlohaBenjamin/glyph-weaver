@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Glyphweaver · Class Codex</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: #121218;
+            color: #f5f5ff;
+        }
+
+        .page {
+            max-width: 1120px;
+            margin: 40px auto;
+            padding: 24px 50px 40px;
+            background: radial-gradient(circle at top left, #25253a 0, #161621 45%, #101018 100%);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: "SF Pro Display", -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: #f7f2ff;
+            margin-top: 1.8em;
+            margin-bottom: 0.4em;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            text-align: center;
+            margin-top: 0.6em;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            background: linear-gradient(120deg, #fbd38d, #9ae6ff, #f7f2ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(251, 211, 141, 0.95), 0 0 22px rgba(120, 200, 255, 0.9), 0 0 36px rgba(90, 160, 255, 0.8);
+            animation: titleGlow 3.6s ease-in-out infinite alternate;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.3em;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #d6c9ff;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 0.98rem;
+            color: #e6e6ff;
+            margin: 0.4em 0 0.6em;
+        }
+
+        strong {
+            color: #fdf3a7;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #f0e9ff;
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.23), rgba(52, 195, 255, 0.1));
+            position: absolute;
+            top: 8px;
+            right: 18px;
+            z-index: 2;
+        }
+
+        .glyph-bubbles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 0.5em;
+        }
+
+        .glyph-bubble {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+            color: #fbd38d;
+            background: radial-gradient(circle at top left,
+            rgba(140, 140, 255, 0.25),
+            rgba(10, 10, 20, 0.95));
+            white-space: nowrap;
+            text-shadow: 0 0 4px rgba(251, 211, 141, 0.7), 0 0 10px rgba(255, 160, 90, 0.6);
+            animation: glyphGlow 3.2s ease-in-out infinite alternate;
+        }
+
+        ul {
+            margin: 0.3em 0 0.9em 1.3em;
+            padding: 0;
+        }
+
+        li {
+            margin: 0.15em 0;
+        }
+
+        .section-block {
+            padding: 14px 16px 10px;
+            border-radius: 12px;
+            background: radial-gradient(circle at top left, rgba(120, 120, 255, 0.18), rgba(5, 5, 15, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 1.1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        @media (max-width: 800px) {
+            .page {
+                margin: 10px auto 30px;
+                padding: 26px 18px;
+                border-radius: 0;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9aa0ff;
+            margin-bottom: 0.1em;
+        }
+
+        /* Glowing inline text styles for Glyphs and Sigils */
+        .text-glyph {
+            color: #fbd38d;
+            text-shadow: 0 0 4px rgba(251, 211, 141, 0.7), 0 0 10px rgba(255, 160, 90, 0.6);
+            animation: glyphGlow 3.2s ease-in-out infinite alternate;
+        }
+
+        .text-sigil {
+            color: #9ae6ff;
+            text-shadow: 0 0 4px rgba(154, 230, 255, 0.7), 0 0 10px rgba(120, 200, 255, 0.6);
+            animation: sigilGlow 3.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glyphGlow {
+            0% {
+                text-shadow: 0 0 2px rgba(251, 211, 141, 0.4), 0 0 5px rgba(255, 160, 90, 0.3);
+                opacity: 0.9;
+            }
+            50% {
+                text-shadow: 0 0 4px rgba(251, 211, 141, 0.8), 0 0 12px rgba(255, 180, 120, 0.7);
+                opacity: 1;
+            }
+            100% {
+                text-shadow: 0 0 6px rgba(251, 211, 141, 1), 0 0 18px rgba(255, 200, 150, 0.9);
+                opacity: 0.95;
+            }
+        }
+
+        @keyframes sigilGlow {
+            0% {
+                text-shadow: 0 0 2px rgba(154, 230, 255, 0.4), 0 0 5px rgba(120, 200, 255, 0.3);
+                opacity: 0.9;
+            }
+            50% {
+                text-shadow: 0 0 4px rgba(154, 230, 255, 0.8), 0 0 12px rgba(160, 220, 255, 0.7);
+                opacity: 1;
+            }
+            100% {
+                text-shadow: 0 0 6px rgba(154, 230, 255, 1), 0 0 18px rgba(190, 240, 255, 0.9);
+                opacity: 0.95;
+            }
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 4px rgba(251, 211, 141, 0.6), 0 0 10px rgba(120, 200, 255, 0.5), 0 0 18px rgba(90, 160, 255, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 8px rgba(251, 211, 141, 1), 0 0 24px rgba(120, 200, 255, 0.95), 0 0 40px rgba(90, 160, 255, 0.9);
+            }
+            100% {
+                text-shadow: 0 0 10px rgba(251, 211, 141, 0.9), 0 0 30px rgba(120, 200, 255, 0.9), 0 0 50px rgba(90, 160, 255, 0.85);
+            }
+        }
+
+        .mono {
+            font-family: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+            font-size: 0.86rem;
+            color: #cde7ff;
+        }
+
+        .tagline {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #c8d4ff;
+            margin-bottom: 1.8em;
+        }
+
+        .subtitle {
+            margin-top: 0.2em;
+            margin-bottom: 0.6em;
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #f7f2ff;
+            text-shadow: 0 0 4px rgba(154, 230, 255, 0.7), 0 0 12px rgba(133, 76, 255, 0.6);
+        }
+
+        .header-image {
+            margin: -24px -50px 16px;
+            border-radius: 16px 16px 0 0;
+            overflow: hidden;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+            background: #000;
+        }
+
+        .header-image img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 8 / 1;
+            object-fit: cover;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.4em 0 1em;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 6px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.06);
+            font-weight: 600;
+        }
+
+        .smallnote {
+            font-size: 0.8rem;
+            color: #a8b0ff;
+        }
+
+        .glyph-stat {
+            margin: 0.2em 0 0.5em;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(10, 10, 25, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-family: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+            font-size: 0.8rem;
+            color: #d4e2ff;
+            display: inline-block;
+        }
+
+        .glyph-card {
+            margin: 0.5em 0 1.2em;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: radial-gradient(circle at top left, rgba(120, 120, 230, 0.6), rgba(10, 10, 35, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+            font-family: "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+            font-size: 0.8rem;
+            color: #d4e2ff;
+        }
+
+        .glyph-card-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .glyph-card-name {
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #fbd38d;
+            text-shadow: 0 0 4px rgba(251, 211, 141, 0.7), 0 0 10px rgba(255, 160, 90, 0.6);
+            animation: glyphGlow 3.2s ease-in-out infinite alternate;
+        }
+
+        .glyph-card-tag {
+            padding: 1px 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .glyph-card-tag-align-right {
+            margin-left: auto;
+        }
+
+        .glyph-card-tag-open {
+            border-color: rgba(130, 230, 150, 0.9);
+            background: radial-gradient(circle at top left, rgba(130, 230, 150, 0.35), rgba(5, 25, 10, 0.95));
+            color: #e6ffef;
+        }
+
+        .glyph-card-tag.stability-volatile {
+            border-color: rgba(255, 120, 80, 0.9);
+            background: radial-gradient(circle at top left, rgba(255, 120, 80, 0.4), rgba(40, 10, 5, 0.9));
+            color: #ffe9df;
+        }
+
+        .glyph-card-tag.stability-inert {
+            border-color: rgba(200, 200, 255, 0.6);
+            background: radial-gradient(circle at top left, rgba(180, 180, 255, 0.25), rgba(15, 15, 30, 0.95));
+            color: #e6eaff;
+        }
+
+        .glyph-card-tag.stability-stabilizing {
+            border-color: rgba(130, 230, 200, 0.9);
+            background: radial-gradient(circle at top left, rgba(130, 230, 200, 0.35), rgba(5, 25, 20, 0.95));
+            color: #e6fff8;
+        }
+
+        .glyph-card-row {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            column-gap: 8px;
+            row-gap: 2px;
+            margin-top: 2px;
+        }
+
+        .glyph-card-label {
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9aa0ff;
+        }
+
+        .glyph-card-value {
+            color: #e6ecff;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .glyph-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 4px;
+            padding: 0 2px 2px;
+        }
+
+        .glyph-chip {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(12, 14, 40, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 0.75rem;
+            width: calc(100% - 4px);
+            margin: 0 2px;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+
+        .glyph-chip-label {
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9aa0ff;
+            flex: 0 0 auto;
+        }
+
+        .glyph-chip-value {
+            color: #e6ecff;
+            margin-left: auto;
+            text-align: right;
+            flex: 1 1 auto;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .glyph-card-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .glyph-card-column {
+            flex: 1 1 calc(33.333% - 16px);
+            min-width: 300px;
+            max-width: 360px;
+            transition: opacity 0.22s ease-out, transform 0.22s ease-out, max-height 0.22s ease-out, margin 0.22s ease-out;
+            max-height: 999px;
+            position: relative;
+        }
+
+        .glyph-card-column.glyph-card-hidden {
+            opacity: 0;
+            transform: translateY(6px) scale(0.97);
+            max-height: 0;
+            margin: 0;
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            padding: 0;
+            pointer-events: none;
+        }
+
+        .glyph-card-image {
+            margin: 0 2px 6px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            aspect-ratio: 16 / 9;
+        }
+
+        .glyph-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
+        }
+
+        .glyph-card-image:hover img {
+            transform: scale(1.03);
+            box-shadow: 0 0 12px rgba(251, 211, 141, 0.5), 0 0 20px rgba(120, 200, 255, 0.4);
+        }
+
+        .glyph-dictionary-controls {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin: 0.4em 0 0.8em;
+        }
+
+        .glyph-search-group,
+        .glyph-stability-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .glyph-search-group {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .glyph-search-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9aa0ff;
+        }
+
+        .glyph-search-input-wrap {
+            display: flex;
+            align-items: center;
+            background: rgba(10, 10, 30, 0.9);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 0 4px 0 0;
+        }
+
+        .glyph-dictionary-controls input[type="text"] {
+            flex: 1 1 auto;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            padding: 4px 8px;
+            color: #f5f5ff;
+            font-size: 0.8rem;
+        }
+
+        .glyph-dictionary-controls input[type="text"]::placeholder {
+            color: rgba(200, 205, 255, 0.6);
+        }
+
+        .glyph-search-clear {
+            flex: 0 0 auto;
+            border: none;
+            background: transparent;
+            color: rgba(200, 205, 255, 0.7);
+            font-size: 0.8rem;
+            padding: 0 4px;
+            cursor: pointer;
+        }
+
+        .glyph-search-clear:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 800px) {
+            .glyph-dictionary-controls {
+                flex-wrap: wrap;
+                align-items: stretch;
+            }
+        }
+
+        .glyph-stability-toggle {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: rgba(10, 10, 30, 0.9);
+            border-radius: 999px;
+            padding: 3px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .glyph-stability-button {
+            border: none;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: transparent;
+            color: #c8d4ff;
+            cursor: pointer;
+            transition: background 0.18s ease-out, color 0.18s ease-out, transform 0.18s ease-out, box-shadow 0.18s ease-out;
+        }
+
+        .glyph-stability-button.active {
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.6), rgba(52, 195, 255, 0.4));
+            color: #fdfbff;
+            transform: translateY(-1px);
+            box-shadow: 0 0 8px rgba(133, 76, 255, 0.6), 0 0 12px rgba(52, 195, 255, 0.5);
+        }
+
+        .main-section-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 1.2em;
+        }
+
+        .main-section-nav-pills {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .main-section-pill {
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(10, 10, 30, 0.9);
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            color: #d6e4ff;
+            cursor: pointer;
+            transition: background 0.18s ease-out, color 0.18s ease-out, box-shadow 0.18s ease-out, transform 0.18s ease-out;
+        }
+
+        .main-section-pill:hover {
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.4), rgba(52, 195, 255, 0.25));
+            color: #ffffff;
+            box-shadow: 0 0 8px rgba(133, 76, 255, 0.6), 0 0 14px rgba(52, 195, 255, 0.5);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 800px) {
+            .main-section-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .glyph-dictionary-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .collapsible-header {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .collapsible-header::after {
+            content: '\25BE'; /* small down triangle */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .collapsible-header.collapsed::after {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        .folder-header {
+            margin-top: 1.8em;
+            margin-bottom: 0.2em;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.25), rgba(52, 195, 255, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #f7f2ff;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .folder-header::after {
+            content: '\25BE';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .folder-header.collapsed::after {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        /* animated collapsible sections */
+        .section-collapsible {
+            overflow: hidden;
+            max-height: 2000px;
+            opacity: 1;
+            transition: max-height 0.26s ease-in-out,
+            opacity 0.22s ease-in-out,
+            margin-top 0.22s ease-in-out,
+            margin-bottom 0.22s ease-in-out,
+            padding-top 0.22s ease-in-out,
+            padding-bottom 0.22s ease-in-out;
+        }
+
+        .section-collapsible.section-collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .folder-section-wrapper {
+            /* wrapper that collapses entire folder without touching subsection state */
+        }
+    </style>
+    <link rel="icon" type="image/png" href="./images/favicon.ico">
+</head>
+
+<body>
+<div class="page">
+
+    <div class="badge">Glyphweaver · Core Class Codex (Draft v1.2)</div>
+    <div class="header-image">
+        <img src="./images/header.png" alt="Glyphweaver header art">
+    </div>
+    <h1>Glyphweaver</h1>
+    <h2 class="subtitle">“The Language Behind Magic”</h2>
+    <div class="tagline">
+        Draft ruleset for the <strong>Glyphweaver</strong>, a caster who shapes reality through living <span class="text-glyph">Glyphs</span> and
+        structured <span class="text-sigil">Sigils</span>.<br>
+    </div>
+
+    <!-- ————————————————————————————————————————— -->
+    <div class="folder-header" data-folder-id="folder-class-specs">Class Specifications</div>
+    <h2 id="class-overview">🔮 Class Overview</h2>
+    <div class="section-block">
+        <p><span class="label">Theme</span><br>
+            The <strong>Glyphweaver</strong> is a full caster who doesn’t memorize discrete spells. Instead, they wield
+            a growing lexicon of <strong>glyphs</strong>—each a fundamental concept of reality—and combine them into
+            <strong>sigils</strong> that behave like spells. They trade fixed lists for structured improvisation.</p>
+
+        <p><span class="label">Role in the Party</span><br>
+            Flexible controller / blaster / support depending on sigils used in a given scene. Glyphweavers excel at
+            <strong>adapting</strong> mid-combat, creating custom effects from a shared alphabet.</p>
+
+        <div class="grid">
+            <div>
+                <p><span class="label">Hit Dice & Proficiencies</span></p>
+                <ul>
+                    <li><strong>Hit Dice:</strong> 1d8 per Glyphweaver level</li>
+                    <li><strong>Primary Casting Stat:</strong> Intelligence or Wisdom <strong>[TBD at table]</strong>
+                    </li>
+                    <li><strong>Saving Throws:</strong> Intelligence, Wisdom</li>
+                    <li><strong>Armor:</strong> Light armor</li>
+                    <li><strong>Weapons:</strong> Simple weapons</li>
+                    <li><strong>Skills:</strong> Choose two: Arcana, Insight, Investigation, Religion, History</li>
+                    <li><strong>Languages:</strong> Primordial, plus one language of the player’s choice</li>
+                </ul>
+            </div>
+            <div>
+                <p><span class="label">Core Mechanics (Summary)</span></p>
+                <ul>
+                    <li><strong>Glyphs:</strong> atomic concepts; 1-glyph cast = volatile cantrip, usually <strong>touch
+                        range</strong> unless otherwise noted.
+                    </li>
+                    <li><strong>Sigils:</strong> 2+ glyphs combined into structured, repeatable magic.</li>
+                    <li><strong>Volatility:</strong> how unstable a sigil is; drives SP cost and surge risk.</li>
+                    <li><strong>SP (Stability Points):</strong> equals Sorcerer Sorcery Points by level (0 at 1st, then
+                        2–20 from 2nd–20th).
+                    </li>
+                    <li><strong>Potency Die:</strong> your scaling die for damage/healing/effect strength.</li>
+                    <li><strong>Focus & Anchor:</strong> stabilizing concentration glyphs (see Concentration &
+                        Dictionary).
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Potency & scaling under Class Specifications -->
+    <h2>🔢 Potency Dice & Scaling</h2>
+    <div class="section-block">
+        <p><span class="label">Potency Die Progression</span></p>
+        <table>
+            <tr>
+                <th>Glyphweaver Level</th>
+                <th>Potency Die</th>
+            </tr>
+            <tr>
+                <td>1–4</td>
+                <td>d8</td>
+            </tr>
+            <tr>
+                <td>5–8</td>
+                <td>d10</td>
+            </tr>
+            <tr>
+                <td>9–12</td>
+                <td>d12</td>
+            </tr>
+            <tr>
+                <td>13–16</td>
+                <td>d12 <span class="smallnote">(possible advantage on high-volatility casts — TBD)</span></td>
+            </tr>
+            <tr>
+                <td>17–20</td>
+                <td>d20</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Class progression -->
+    <h2>⬆️️ Class Progression</h2>
+    <div class="section-block">
+        <table>
+            <tr>
+                <th>Level</th>
+                <th>Features</th>
+                <th>Glyphs Attuned</th>
+                <th>Sigils Woven</th>
+                <th>SP Pool</th>
+                <th>Potency Die</th>
+                <th>Sigilic Complexity</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Class Features (TBD)</td>
+                <td>3</td>
+                <td>2</td>
+                <td>3</td>
+                <td>d8</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Class Features (TBD)</td>
+                <td>4</td>
+                <td>3</td>
+                <td>5</td>
+                <td>d8</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Choose Subclass</td>
+                <td>5</td>
+                <td>4</td>
+                <td>6</td>
+                <td>d8</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>ASI / Feat or Forged Feat (TBD)</td>
+                <td>6</td>
+                <td>4</td>
+                <td>7</td>
+                <td>d8</td>
+                <td>2</td>
+            </tr>
+
+            <tr>
+                <td>5</td>
+                <td>Class Features (TBD)</td>
+                <td>7</td>
+                <td>5</td>
+                <td>8</td>
+                <td>d10</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Subclass Feature</td>
+                <td>8</td>
+                <td>5</td>
+                <td>9</td>
+                <td>d10</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Class Features (TBD)</td>
+                <td>9</td>
+                <td>6</td>
+                <td>10</td>
+                <td>d10</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>ASI / Feat or Forged Feat (TBD)</td>
+                <td>10</td>
+                <td>6</td>
+                <td>11</td>
+                <td>d10</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Class Features (TBD)</td>
+                <td>11</td>
+                <td>7</td>
+                <td>12</td>
+                <td>d12</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Subclass Feature</td>
+                <td>12</td>
+                <td>7</td>
+                <td>13</td>
+                <td>d12</td>
+                <td>3</td>
+            </tr>
+
+            <tr>
+                <td>11</td>
+                <td>Class Features (TBD)</td>
+                <td>13</td>
+                <td>8</td>
+                <td>14</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>ASI / Feat or Forged Feat (TBD)</td>
+                <td>14</td>
+                <td>8</td>
+                <td>15</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>Class Features (TBD)</td>
+                <td>15</td>
+                <td>9</td>
+                <td>16</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Subclass Feature</td>
+                <td>16</td>
+                <td>9</td>
+                <td>17</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>Class Features (TBD)</td>
+                <td>17</td>
+                <td>10</td>
+                <td>18</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>ASI / Feat or Forged Feat (TBD)</td>
+                <td>18</td>
+                <td>10</td>
+                <td>19</td>
+                <td>d12</td>
+                <td>4</td>
+            </tr>
+
+            <tr>
+                <td>17</td>
+                <td>Class Features (TBD)</td>
+                <td>19</td>
+                <td>11</td>
+                <td>20</td>
+                <td>d20</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>Subclass Feature</td>
+                <td>20</td>
+                <td>11</td>
+                <td>21</td>
+                <td>d20</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>ASI / Feat or Forged Feat (TBD)</td>
+                <td>21</td>
+                <td>12</td>
+                <td>22</td>
+                <td>d20</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>Class Capstone (TBD)</td>
+                <td>22</td>
+                <td>12</td>
+                <td>23</td>
+                <td>d20</td>
+                <td>5</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Subclasses -->
+    <h2>🔱 Subclasses</h2>
+
+    <h3>Harmonizer — Path of Equilibrium</h3>
+    <div class="section-block">
+        <p><span class="label">Concept</span><br>
+            You embody balance. Your art is resolving tension into resonance. You specialize in low-volatility sigils,
+            protecting and steadying the weave around you.</p>
+        <p><span class="label">Progression</span> — features TBD.</p>
+    </div>
+
+    <h3>Paradoxian — Path of Opposition</h3>
+    <div class="section-block">
+        <p><span class="label">Concept</span><br>
+            You seek truth at the collision of opposites. You specialize in high-volatility sigils, opposed glyph pairs,
+            and constructive failure.</p>
+        <p><span class="label">Progression</span> — features TBD.</p>
+    </div>
+
+    <h3>Lexomancer — Path of the Living Language</h3>
+    <div class="section-block">
+        <p><span class="label">Concept</span><br>
+            You see glyphs as grammar. You don’t just cast spells; you <strong>author</strong> them. Your defining
+            specialty is forging your own “rules text” in the form of permanent feat-sigils.</p>
+
+        <p><span class="label">Forged Feat Law</span></p>
+        <ul>
+            <li><strong>6th level — First Forged Feat:</strong> you gain your first <strong>Forged Feat</strong>. It is
+                designed as a signature sigil-effect using the glyphs you currently know.
+            </li>
+            <li><strong>All later feats are forged:</strong> whenever you would gain an ASI/feat after 6th level, you
+                forge a new custom feat instead of choosing from printed options (unless the DM overrides).
+            </li>
+            <li><strong>Glyph-count limit:</strong> each Forged Feat’s defining sigil may include at most as many glyphs
+                as your current <strong>Glyphs Known</strong>. In practice, you can only use glyphs you know; complexity
+                scales with your lexicon.
+            </li>
+            <li><strong>Permanent sigil:</strong> a Forged Feat is a permanent, always-available effect, not part of
+                your daily sigil attunement.
+            </li>
+        </ul>
+        <p><span class="label">Other Features</span> — TBD; they will mostly support/extend Forged Feats.</p>
+    </div>
+
+    <h3>Elementalist — Path of the Primal Tongue</h3>
+    <div class="section-block">
+        <p><span class="label">Concept</span><br>
+            You speak first and foremost to the elements. Your lexicon is rooted in Fire, Water, Earth, Air, and
+            Lightning.</p>
+        <p><span class="label">Locked Hook</span><br>
+            At 3rd level you gain <strong class="text-glyph">Fire, Water, Earth, Air, Lightning</strong> as bonus
+            glyphs, exceeding your normal Glyphs Known limit.</p>
+        <p><span class="label">Further Features</span> — TBD.</p>
+    </div>
+
+    <!-- ————————————————————————————————————————— -->
+    <div class="folder-header" data-folder-id="folder-glyph-mechanics">Glyph Mechanics</div>
+
+    <h2 id="glyph-mechanics">✨ Glyphs: The Arcane Alphabet</h2>
+    <div class="section-block">
+        <p><span class="label">Glyph Categories (Draft)</span></p>
+        <ul>
+            <li><strong>Elemental:</strong> <span class="text-glyph">Fire</span>, <span class="text-glyph">Water</span>,
+                <span class="text-glyph">Air</span>, <span class="text-glyph">Earth</span>, <span class="text-glyph">Lightning</span>.
+            </li>
+            <li><strong>Forces & Dynamics:</strong> <span class="text-glyph">Flow</span>, <span class="text-glyph">Anchor</span>,
+                <span class="text-glyph">Pulse</span>, <span class="text-glyph">Echo</span>, <span class="text-glyph">Empower</span>,
+                <span class="text-glyph">Focus</span>, <span class="text-glyph">Swift</span>, <span class="text-glyph">Mirror</span>,
+                <span class="text-glyph">Shield</span>, <span class="text-glyph">Beam</span>, <span class="text-glyph">Bolt</span>,
+                <span class="text-glyph">Zone</span>, <span class="text-glyph">Big</span>, <span class="text-glyph">Small</span>.
+            </li>
+            <li><strong>Conceptual / Mental:</strong> <span class="text-glyph">Dream</span>, <span class="text-glyph">Life</span>,
+                <span class="text-glyph">Death</span>, <span class="text-glyph">Truth</span>, <span class="text-glyph">Silence</span>,
+                <span class="text-glyph">Paradox</span>, <span class="text-glyph">Time</span>, <span class="text-glyph">Space</span>,
+                <span class="text-glyph">Light</span>, <span class="text-glyph">Shadow</span>, <span class="text-glyph">Know</span>,
+                <span class="text-glyph">See</span>, <span class="text-glyph">Become</span>, <span class="text-glyph">Find</span>,
+                <span class="text-glyph">Rush</span>, <span class="text-glyph">Force</span>, <span class="text-glyph">Allow</span>,
+                <span class="text-glyph">Null</span>.
+            </li>
+            <li><strong>Alignment & Morality:</strong> <span class="text-glyph">Order</span>, <span class="text-glyph">Chaos</span>,
+                <span class="text-glyph">Balance</span>, <span class="text-glyph">Good</span>, <span class="text-glyph">Moral Neutral</span>,
+                <span class="text-glyph">Evil</span>.
+            </li>
+            <li><strong>Crafting & Permanence:</strong> <span class="text-glyph">Infuse</span>, <span
+                    class="text-glyph">Enchant</span>, <span class="text-glyph">Bind</span>, <span class="text-glyph">Break</span>.
+            </li>
+            <li><strong>Special / Other:</strong> <span class="text-glyph">Purity</span>, <span
+                    class="text-glyph">Nope</span>, <span class="text-glyph">Luck</span>, <span
+                    class="text-glyph">Wild</span>, <span class="text-glyph">Summon</span>, <span class="text-glyph">Pair</span>,
+                <span class="text-glyph">Far</span>, <span class="text-glyph">Door</span>.
+            </li>
+        </ul>
+
+        <p><span class="label">Stability / Temperament</span></p>
+        <ul>
+            <li><strong>Volatile:</strong> adds instability (+1 volatility by default).</li>
+            <li><strong>Inert:</strong> neutral (0 volatility).</li>
+            <li><strong>Stabilizing:</strong> reduces instability when used to focus or harmonize (–1 volatility when
+                conditions are met).
+            </li>
+        </ul>
+
+        <p class="smallnote">Most 1-glyph cantrip castings are considered <strong>on-touch range</strong> by default;
+            range and geometry are primarily defined by Focus glyphs (<span class="text-glyph">Bolt</span>, <span
+                    class="text-glyph">Beam</span>, <span class="text-glyph">Zone</span>, etc.) in sigils.</p>
+    </div>
+
+    <h2>📜 Sigils: Constructed Spells</h2>
+    <div class="section-block">
+        <p><span class="label">Definition</span><br>
+            A <strong>sigil</strong> is any deliberate combination of two or more glyphs into a coherent effect. Where a
+            lone glyph is raw and partially unpredictable, a sigil is a <strong>sentence</strong> the world understands.
+        </p>
+
+        <p><span class="label">Sigil Complexity (TBD)</span></p>
+        <ul>
+            <li><strong>2-glyph sigil:</strong> behaves roughly like a 1st–2nd-level spell (mapping TBD).</li>
+            <li><strong>3-glyph sigil:</strong> behaves roughly like a 3rd–4th-level spell.</li>
+            <li><strong>4–5-glyph sigil:</strong> high-level or ritual-grade magic.</li>
+        </ul>
+
+        <p><span class="label">Focus Glyphs (Scope)</span></p>
+        <ul>
+            <li><strong><span class="text-glyph">Bolt</span>:</strong> single-target projectile, 30 ft, spell attack vs
+                AC.
+            </li>
+            <li><strong><span class="text-glyph">Beam</span>:</strong> 15 ft line, Dexterity save vs spell DC to
+                halve/avoid.
+            </li>
+            <li><strong><span class="text-glyph">Zone</span>:</strong> 10 ft radius area effect, usually
+                concentration-based.
+            </li>
+            <li><strong><span class="text-glyph">Big</span> / <span class="text-glyph">Small</span>:</strong> scale area
+                or precision (multipliers TBD).
+            </li>
+            <li><strong><span class="text-glyph">Swift</span>:</strong> compresses sigil to a bonus action (likely adds
+                volatility or SP cost).
+            </li>
+            <li><strong><span class="text-glyph">Flow</span>:</strong> moves or sweeps an existing effect.</li>
+        </ul>
+
+        <p><span class="label">Harmonizer Glyphs</span></p>
+        <ul>
+            <li><strong class="text-glyph">Anchor, Balance, Flow, Zone, Mirror, Null, Life, Truth, Know, Focus</strong>
+                can all serve as harmonizers in context, reducing volatility when they clearly stabilize, constrain, or
+                clarify the effect.
+            </li>
+        </ul>
+
+        <p><span class="label">Sample Sigils</span></p>
+        <ul>
+            <li><strong class="text-sigil">Fire + Bolt</strong>: focused blast of fire; basic ranged cantrip analogue.
+                Volatility 0 when cleanly cast; damage ~ 1 Potency (fire).
+            </li>
+            <li><strong class="text-sigil">Fire + Fire</strong>: amplified flare; higher damage, extra volatility and
+                surge risk.
+            </li>
+            <li><strong class="text-sigil">Light + Zone + Focus</strong>: sustained consecrated radiance zone; heals
+                living, harms undead while you concentrate.
+            </li>
+            <li><strong class="text-sigil">Null + Zone + Anchor</strong>: anchored “dead zone” where magic and senses
+                fail; persists without concentration.
+            </li>
+            <li><strong class="text-sigil">Truth + Zone + Focus</strong>: zone-of-truth analogue, using spell save DC
+                and concentration.
+            </li>
+        </ul>
+    </div>
+    <div class="section-block" style="background:#26262b;border-color:rgba(255,255,255,0.12);margin-top:0.8em;">
+        <p><span class="label">Stability Index by Glyph (Draft)</span></p>
+        <details>
+            <summary class="smallnote">Volatile Glyphs</summary>
+            <div class="glyph-bubbles" style="margin-top: 0.4em;">
+                <span class="glyph-bubble">Fire</span>
+                <span class="glyph-bubble">Lightning</span>
+                <span class="glyph-bubble">Death</span>
+                <span class="glyph-bubble">Chaos</span>
+                <span class="glyph-bubble">Wild</span>
+                <span class="glyph-bubble">Break</span>
+                <span class="glyph-bubble">Paradox</span>
+            </div>
+        </details>
+        <details>
+            <summary class="smallnote">Stabilizing Glyphs</summary>
+            <div class="glyph-bubbles" style="margin-top: 0.4em;">
+                <span class="glyph-bubble">Bolt</span>
+                <span class="glyph-bubble">Focus</span>
+                <span class="glyph-bubble">Anchor</span>
+                <span class="glyph-bubble">Shield</span>
+                <span class="glyph-bubble">Balance</span>
+                <span class="glyph-bubble">Order</span>
+                <span class="glyph-bubble">Zone</span>
+                <span class="glyph-bubble">Mirror</span>
+                <span class="glyph-bubble">Null</span>
+                <span class="glyph-bubble">Infuse</span>
+                <span class="glyph-bubble">Enchant</span>
+                <span class="glyph-bubble">Bind</span>
+                <span class="glyph-bubble">Purity</span>
+                <span class="glyph-bubble">Pair</span>
+                <span class="glyph-bubble">Door</span>
+            </div>
+        </details>
+        <details>
+            <summary class="smallnote">Inert Glyphs</summary>
+            <div class="glyph-bubbles" style="margin-top: 0.4em;">
+                <span class="glyph-bubble">Water</span>
+                <span class="glyph-bubble">Air</span>
+                <span class="glyph-bubble">Earth</span>
+
+                <span class="glyph-bubble">Flow</span>
+                <span class="glyph-bubble">Pulse</span>
+                <span class="glyph-bubble">Echo</span>
+                <span class="glyph-bubble">Empower</span>
+                <span class="glyph-bubble">Swift</span>
+                <span class="glyph-bubble">Beam</span>
+                <span class="glyph-bubble">Big</span>
+                <span class="glyph-bubble">Small</span>
+
+                <span class="glyph-bubble">Dream</span>
+                <span class="glyph-bubble">Life</span>
+                <span class="glyph-bubble">Truth</span>
+                <span class="glyph-bubble">Silence</span>
+                <span class="glyph-bubble">Time</span>
+                <span class="glyph-bubble">Space</span>
+                <span class="glyph-bubble">Light</span>
+                <span class="glyph-bubble">Shadow</span>
+                <span class="glyph-bubble">Know</span>
+                <span class="glyph-bubble">See</span>
+                <span class="glyph-bubble">Become</span>
+                <span class="glyph-bubble">Find</span>
+                <span class="glyph-bubble">Rush</span>
+                <span class="glyph-bubble">Force</span>
+                <span class="glyph-bubble">Allow</span>
+
+                <span class="glyph-bubble">Good</span>
+                <span class="glyph-bubble">Moral Neutral</span>
+                <span class="glyph-bubble">Evil</span>
+
+                <span class="glyph-bubble">Nope</span>
+                <span class="glyph-bubble">Luck</span>
+                <span class="glyph-bubble">Summon</span>
+                <span class="glyph-bubble">Far</span>
+            </div>
+        </details>
+        <p class="smallnote">These stability assignments are a draft and can be re-tagged at the table if a different
+            temperament fits your world better.</p>
+    </div>
+
+    <h2>⚖️ Volatility & Stability Points (SP)</h2>
+    <div class="section-block">
+        <p><span class="label">Volatility (Concept)</span></p>
+        <ul>
+            <li>Each <strong>Volatile</strong> glyph (e.g., <span class="text-glyph">Fire</span>) normally contributes
+                +1 volatility.
+            </li>
+            <li>Each <strong>Inert</strong> glyph (e.g., <span class="text-glyph">Life</span>) contributes 0 volatility.
+            </li>
+            <li>Each <strong>Stabilizing</strong> glyph (e.g., <span class="text-glyph">Bolt</span>, <span
+                    class="text-glyph">Focus</span>, <span class="text-glyph">Anchor</span>) can reduce volatility by 1
+                when used to focus or harmonize.
+            </li>
+            <li>Opposed pairs (Fire/Ice, Life/Death, Order/Chaos, Light/Shadow, etc.) add extra volatility if
+                unmediated; with harmonizers, they can be treated as balanced (exact math TBD).
+            </li>
+            <li>Doubling a glyph (<span class="text-glyph">Fire</span> + <span class="text-glyph">Fire</span>) amplifies
+                its effect, increases volatility, grants +1 Potency Die, and triggers that glyph’s Secondary Effect if
+                it has one.
+            </li>
+        </ul>
+
+        <p><span class="label">SP Mapping</span><br>
+            The Glyphweaver’s SP per level is set to Sorcerer Sorcery Points plus 3: effectively 3 at 1st level, then
+            class level + 3 from 2nd onward (so it would track 3, 5–23 across levels 1–20).</p>
+
+        <p><span class="label">SP as Soft Cap (Values TBD)</span></p>
+        <ul>
+            <li>Balanced sigils (volatility 0) cost 0 SP.</li>
+            <li>Higher-volatility sigils cost more SP and increase surge risk; exact tier costs TBD.</li>
+            <li>You can overextend below 0 SP, accepting severe surge/backfire risk.</li>
+        </ul>
+
+        <p><span class="label">Control Checks (TBD)</span></p>
+        <p class="mono">Proposed: Control DC = 10 + (2 × volatility) + situational modifiers</p>
+        <p>Exact skill/stat and thresholds are TBD; the structural idea—roll to stabilize volatile sigils—is fixed.</p>
+    </div>
+
+    <h2>🧠 Concentration & Anchoring</h2>
+    <div class="section-block">
+        <p><span class="label">Focus — Concentration Glyph</span></p>
+        <ul>
+            <li>To create an effect that is maintained by your will, the sigil must include the <strong
+                    class="text-glyph">Focus</strong> glyph.
+            </li>
+            <li>Sigils without Focus are generally instantaneous or fixed-duration non-concentration effects (unless
+                explicitly anchored by other means).
+            </li>
+            <li><strong class="text-glyph">Focus</strong> is a <strong>Stabilizing</strong> glyph: when used to define
+                concentration clearly, it can reduce volatility by 1.
+            </li>
+        </ul>
+
+        <p><span class="label">Anchor — Persistence Glyph</span></p>
+        <ul>
+            <li><span class="text-glyph">Anchor</span> allows a sigil to persist <strong>without</strong> requiring
+                continued concentration.
+            </li>
+            <li>Typical flow: cast a <span class="text-glyph">Focus</span> sigil, sustain it briefly, then incorporate
+                <span class="text-glyph">Anchor</span> (or cast a variant including <span
+                        class="text-glyph">Anchor</span>) to “set” it into the world.
+            </li>
+            <li>Once anchored, the effect no longer uses your concentration slot and, by default, persists for about 10
+                minutes unless a sigil explicitly specifies a different duration (for example by including Time, Big, or
+                other modifying glyphs).
+            </li>
+            <li><strong class="text-glyph">Anchor</strong> is also <strong>Stabilizing</strong>, usually reducing
+                volatility by 1 when used to fix an effect in space or onto an object.
+            </li>
+        </ul>
+
+        <p><span class="label">Concentration Slot</span></p>
+        <ul>
+            <li>By default, you can maintain <strong>one</strong> Focus-based sigil at a time (standard 5e concentration
+                rules).
+            </li>
+            <li>Some subclasses (e.g., Harmonizer) may alter how many Focus sigils you can maintain or how easily you
+                can transfer them into Anchors.
+            </li>
+        </ul>
+    </div>
+
+    <h2>✨ Secondary Effects</h2>
+    <div class="section-block">
+        <p><span class="label">Core Rule</span><br>
+            Some glyphs define a small, thematic <strong>Secondary Effect</strong> that triggers when that glyph is
+            <strong>doubled</strong> in a sigil (Glyph + Glyph). Doubling a glyph already amplifies its effect,
+            increases volatility, and grants +1 Potency Die; if that glyph has a Secondary Effect, it also applies as a
+            rider.</p>
+
+        <p><span class="label">Design Intent</span></p>
+        <ul>
+            <li>Make <strong>doubling</strong> a glyph meaningful beyond raw numbers, adding flavor and tactical choice.
+            </li>
+            <li>Keep Secondary Effects <strong>minor but impactful</strong>, scaling with Potency and theme rather than
+                replacing the main effect.
+            </li>
+            <li>Ensure each glyph that has a Secondary Effect reflects its <strong>core essence</strong> (Fire burns,
+                Life invigorates, Bolt staggers, etc.).
+            </li>
+        </ul>
+
+        <p><span class="label">Current Examples</span></p>
+        <ul>
+            <li><strong class="text-glyph">Fire — Burn:</strong> doubling <span class="text-glyph">Fire</span> (<span
+                    class="text-glyph">Fire</span> + <span class="text-glyph">Fire</span>) may cause affected creatures
+                or objects to catch fire, taking ongoing minor fire damage each round until extinguished or the DM rules
+                the burning stops.
+            </li>
+            <li><strong class="text-glyph">Life — Vitality:</strong> doubling <span class="text-glyph">Life</span>
+                (<span class="text-glyph">Life</span> + <span class="text-glyph">Life</span>) grants a small amount of
+                temporary hit points alongside any healing or beneficial effect.
+            </li>
+            <li><strong class="text-glyph">Bolt — Stagger:</strong> doubling <span class="text-glyph">Bolt</span> (<span
+                    class="text-glyph">Bolt</span> + <span class="text-glyph">Bolt</span>) forces a creature hit to make
+                a Strength saving throw against your spell save DC or suffer one of your choice: be pushed 5 ft directly
+                away from you, knocked prone, or have disadvantage on its next attack before the end of its next turn.
+            </li>
+        </ul>
+
+        <p class="smallnote">Future glyphs may or may not have Secondary Effects; when they do, they will be added to
+            their entries in the Glyph Dictionary using the same pattern.</p>
+    </div>
+
+    <h2>🧪 Possible Mechanics (Backlog)</h2>
+    <div class="section-block" style="background:#26262b;border-color:rgba(255,255,255,0.12);">
+        <p><span class="label">Systems To Flesh Out</span></p>
+        <ul>
+            <li><strong>Forged Feats:</strong> fully specifying templates and power bands for subclass-specific forged
+                feats (especially Lexomancer, but potentially others).
+            </li>
+            <li><strong>Surges & Backfires:</strong> element- and concept-specific surge tables (Fire surges, Mind
+                surges, Void surges, etc.), plus global rules for when surges trigger.
+            </li>
+            <li><strong>Free-Glyph Casting (Out of Combat):</strong> a mechanic allowing each Glyphweaver a certain
+                number (N) of <strong>free 1-glyph casts per day</strong> outside combat, with no SP cost and limited to
+                utility / non-damage effects. N and constraints are TBD.
+            </li>
+        </ul>
+        <p class="smallnote">This section is an intentional parking lot for mechanics that we know we want but haven’t
+            numerically tuned yet.</p>
+    </div>
+
+    <!-- ————————————————————————————————————————— -->
+    <div class="folder-header" data-folder-id="folder-glyph-dictionary">Glyph Dictionary</div>
+    <h2 id="glyph-dictionary">📚 Glyph Dictionary</h2>
+    <div class="section-block">
+        <p><span class="label">Usage Notes</span><br>
+            The dictionary will eventually contain all glyphs. For now, only five are explicitly defined: <strong
+                    class="text-glyph">Fire</strong>, <strong class="text-glyph">Life</strong>, <strong
+                    class="text-glyph">Bolt</strong>, <strong class="text-glyph">Focus</strong>, and <strong
+                    class="text-glyph">Anchor</strong>.</p>
+        <p class="smallnote">
+            Unless otherwise specified, a single-glyph casting is treated as a <strong>touch-range cantrip</strong> with
+            a small Potency-based effect and volatility based on Stability.
+        </p>
+
+        <div class="glyph-dictionary-controls">
+            <div class="glyph-search-group">
+                <span class="glyph-search-label">Search</span>
+                <div class="glyph-search-input-wrap">
+                    <input type="text" id="glyph-search" placeholder="Filter glyph cards by name or text…">
+                    <button type="button" id="glyph-search-clear" class="glyph-search-clear" aria-label="Clear search">
+                        ✕
+                    </button>
+                </div>
+            </div>
+            <div class="glyph-stability-group">
+                <span class="glyph-search-label">Stability</span>
+                <div class="glyph-stability-toggle" id="glyph-stability-toggle">
+                    <button type="button" class="glyph-stability-button active" data-stability="all">All</button>
+                    <button type="button" class="glyph-stability-button" data-stability="volatile">Volatile</button>
+                    <button type="button" class="glyph-stability-button" data-stability="inert">Inert</button>
+                    <button type="button" class="glyph-stability-button" data-stability="stabilizing">Stabilizing
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="glyph-card-columns">
+            <div class="glyph-card-column" data-stability="volatile">
+                <div class="glyph-card">
+                    <div class="glyph-card-header">
+                        <span class="glyph-card-name">FIRE</span>
+                        <span class="glyph-card-tag glyph-card-tag-open glyph-card-tag-align-right">Open</span>
+                        <span class="glyph-card-tag stability-volatile">Volatile (+1)</span>
+                    </div>
+                    <div class="glyph-card-image">
+                        <img src="./images/glyphs/Fire.png" alt="Fire glyph art">
+                    </div>
+                    <div class="glyph-card-body">
+                        <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
+                                class="glyph-chip-value">Heat, Flame, Combustion</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
+                                class="glyph-chip-value">Fire</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">1× Potency Fire</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Touch Flame, Start Fire</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
+                                class="glyph-chip-value">1/2 Potency Burn/ Turn</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glyph-card-column" data-stability="inert">
+                <div class="glyph-card">
+                    <div class="glyph-card-header">
+                        <span class="glyph-card-name">LIFE</span>
+                        <span class="glyph-card-tag glyph-card-tag-open glyph-card-tag-align-right">Open</span>
+                        <span class="glyph-card-tag stability-inert">Inert (0)</span>
+                    </div>
+                    <div class="glyph-card-image">
+                        <img src="./images/glyphs/Life.png" alt="Life glyph art">
+                    </div>
+                    <div class="glyph-card-body">
+                        <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
+                                class="glyph-chip-value">Radiance, Vitality</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
+                                class="glyph-chip-value">Living, Healing</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">1× Potency healing/THP</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Touch mend / stabilize</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
+                                class="glyph-chip-value">Vitality THP on double</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glyph-card-column" data-stability="stabilizing">
+                <div class="glyph-card">
+                    <div class="glyph-card-header">
+                        <span class="glyph-card-name">BOLT</span>
+                        <span class="glyph-card-tag glyph-card-tag-open glyph-card-tag-align-right">Open</span>
+                        <span class="glyph-card-tag stability-stabilizing">Stabilizing (−1)</span>
+                    </div>
+                    <div class="glyph-card-image">
+                        <img src="./images/glyphs/Bolt.png" alt="Bolt glyph art">
+                    </div>
+                    <div class="glyph-card-body">
+                        <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
+                                class="glyph-chip-value">Kinetic projectile</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
+                                class="glyph-chip-value">Narrow, directed line</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">30 ft spell attack</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Minor kinetic dart</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
+                                class="glyph-chip-value">Stagger on double (push/prone/disadv.)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glyph-card-column" data-stability="stabilizing">
+                <div class="glyph-card">
+                    <div class="glyph-card-header">
+                        <span class="glyph-card-name">FOCUS</span>
+                        <span class="glyph-card-tag glyph-card-tag-open glyph-card-tag-align-right">Open</span>
+                        <span class="glyph-card-tag stability-stabilizing">Stabilizing (−1)</span>
+                    </div>
+                    <div class="glyph-card-image">
+                        <img src="./images/glyphs/Focus.png" alt="Focus glyph art">
+                    </div>
+                    <div class="glyph-card-body">
+                        <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
+                                class="glyph-chip-value">Concentration, mental hold</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
+                                class="glyph-chip-value">Marks sigil as sustained</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">Enables concentration rules</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Brief focus/awareness boost</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
+                                class="glyph-chip-value">None (stabilizer only)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glyph-card-column" data-stability="stabilizing">
+                <div class="glyph-card">
+                    <div class="glyph-card-header">
+                        <span class="glyph-card-name">ANCHOR</span>
+                        <span class="glyph-card-tag glyph-card-tag-open glyph-card-tag-align-right">Open</span>
+                        <span class="glyph-card-tag stability-stabilizing">Stabilizing (−1)</span>
+                    </div>
+                    <div class="glyph-card-image">
+                        <img src="./images/glyphs/Anchor.png" alt="Anchor glyph art">
+                    </div>
+                    <div class="glyph-card-body">
+                        <div class="glyph-chip"><span class="glyph-chip-label">Essence</span><span
+                                class="glyph-chip-value">Fixation, persistence</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Filter</span><span
+                                class="glyph-chip-value">Attaches to place/object</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Primary</span><span
+                                class="glyph-chip-value">Persist effect ~10 min</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">1-Glyph</span><span
+                                class="glyph-chip-value">Tiny ward or mark</span></div>
+                        <div class="glyph-chip"><span class="glyph-chip-label">Secondary</span><span
+                                class="glyph-chip-value">None (stabilizer only)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Possible glyphs and mechanics at end of Glyph Mechanics -->
+    <h2>❓ Periphary Glyphs</h2>
+    <div class="section-block" style="background:#26262b;border-color:rgba(255,255,255,0.12);">
+        <p><span class="label">Known But Undetermined Glyphs</span><br>
+            These glyphs are acknowledged as existing in the setting but are not yet mechanically defined beyond their
+            category. They are listed explicitly here as a backlog for future dictionary entries:</p>
+        <div class="glyph-bubbles">
+            <span class="glyph-bubble">Water</span>
+            <span class="glyph-bubble">Air</span>
+            <span class="glyph-bubble">Earth</span>
+            <span class="glyph-bubble">Lightning</span>
+
+            <span class="glyph-bubble">Flow</span>
+            <span class="glyph-bubble">Pulse</span>
+            <span class="glyph-bubble">Echo</span>
+            <span class="glyph-bubble">Empower</span>
+            <span class="glyph-bubble">Swift</span>
+            <span class="glyph-bubble">Mirror</span>
+            <span class="glyph-bubble">Shield</span>
+            <span class="glyph-bubble">Beam</span>
+            <span class="glyph-bubble">Zone</span>
+            <span class="glyph-bubble">Big</span>
+            <span class="glyph-bubble">Small</span>
+
+            <span class="glyph-bubble">Dream</span>
+            <span class="glyph-bubble">Death</span>
+            <span class="glyph-bubble">Truth</span>
+            <span class="glyph-bubble">Silence</span>
+            <span class="glyph-bubble">Paradox</span>
+            <span class="glyph-bubble">Time</span>
+            <span class="glyph-bubble">Space</span>
+            <span class="glyph-bubble">Light</span>
+            <span class="glyph-bubble">Shadow</span>
+            <span class="glyph-bubble">Know</span>
+            <span class="glyph-bubble">See</span>
+            <span class="glyph-bubble">Become</span>
+            <span class="glyph-bubble">Find</span>
+            <span class="glyph-bubble">Rush</span>
+            <span class="glyph-bubble">Force</span>
+            <span class="glyph-bubble">Allow</span>
+            <span class="glyph-bubble">Null</span>
+
+            <span class="glyph-bubble">Order</span>
+            <span class="glyph-bubble">Chaos</span>
+            <span class="glyph-bubble">Balance</span>
+            <span class="glyph-bubble">Good</span>
+            <span class="glyph-bubble">Moral Neutral</span>
+            <span class="glyph-bubble">Evil</span>
+
+            <span class="glyph-bubble">Infuse</span>
+            <span class="glyph-bubble">Enchant</span>
+            <span class="glyph-bubble">Bind</span>
+            <span class="glyph-bubble">Break</span>
+
+            <span class="glyph-bubble">Purity</span>
+            <span class="glyph-bubble">Nope</span>
+            <span class="glyph-bubble">Luck</span>
+            <span class="glyph-bubble">Wild</span>
+            <span class="glyph-bubble">Summon</span>
+            <span class="glyph-bubble">Pair</span>
+            <span class="glyph-bubble">Far</span>
+            <span class="glyph-bubble">Door</span>
+        </div>
+        <p class="smallnote">All above are “real” in the world and can appear in lore, items, or NPC use even before
+            they receive full mechanical writeups.</p>
+    </div>
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const page = document.querySelector('.page');
+        if (!page) return;
+
+        const STORAGE_KEY = 'glyphweaver-section-state-v1';
+        let savedState = {};
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                savedState = JSON.parse(raw) || {};
+            }
+        } catch (e) {
+            savedState = {};
+        }
+
+        // Per-section collapsible H2 headings (subsections), excluding the subtitle
+        const headers = page.querySelectorAll('h2:not(.subtitle)');
+        headers.forEach(function (h2, index) {
+            h2.classList.add('collapsible-header');
+
+            const sectionId = 'section-' + index;
+            h2.dataset.sectionId = sectionId;
+
+            const sectionNodes = [];
+            let sibling = h2.nextElementSibling;
+            while (sibling && sibling.tagName !== 'H2' && !sibling.classList.contains('folder-header')) {
+                sectionNodes.push(sibling);
+                sibling = sibling.nextElementSibling;
+            }
+
+            if (sectionNodes.length === 0) return;
+
+            // mark content as animated-collapsible
+            sectionNodes.forEach(function (node) {
+                node.classList.add('section-collapsible');
+            });
+
+            const initiallyCollapsed = (sectionId in savedState)
+                ? !!savedState[sectionId]
+                : true; // default: collapsed
+
+            if (initiallyCollapsed) {
+                h2.classList.add('collapsed');
+                sectionNodes.forEach(function (node) {
+                    node.classList.add('section-collapsed');
+                });
+            }
+
+            h2.addEventListener('click', function () {
+                const collapsed = h2.classList.toggle('collapsed');
+                sectionNodes.forEach(function (node) {
+                    node.classList.toggle('section-collapsed', collapsed);
+                });
+
+                savedState[sectionId] = collapsed;
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+                } catch (e) {
+                    // ignore storage errors
+                }
+            });
+        });
+
+        // Top-level folder headers (Glyph Mechanics / Class Specs / Glyph Dictionary)
+        const folderHeaders = page.querySelectorAll('.folder-header');
+        folderHeaders.forEach(function (folderHeader) {
+            const folderId = folderHeader.dataset.folderId || ('folder-' + folderHeader.textContent.trim().toLowerCase().replace(/\s+/g, '-'));
+            folderHeader.dataset.folderId = folderId;
+
+            // collect all nodes until next folder-header
+            const collectedNodes = [];
+            let sibling = folderHeader.nextElementSibling;
+            while (sibling && !sibling.classList.contains('folder-header')) {
+                collectedNodes.push(sibling);
+                sibling = sibling.nextElementSibling;
+            }
+
+            if (collectedNodes.length === 0) return;
+
+            // Wrap them in a folder wrapper so we can collapse the whole group
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('folder-section-wrapper', 'section-collapsible');
+            const firstNode = collectedNodes[0];
+            firstNode.parentNode.insertBefore(wrapper, firstNode);
+            collectedNodes.forEach(function (node) {
+                wrapper.appendChild(node);
+            });
+
+            const initiallyCollapsedFolder = (folderId in savedState)
+                ? !!savedState[folderId]
+                : true; // default: collapsed
+
+            if (initiallyCollapsedFolder) {
+                folderHeader.classList.add('collapsed');
+                wrapper.classList.add('section-collapsed');
+            }
+
+            folderHeader.addEventListener('click', function () {
+                const collapsed = folderHeader.classList.toggle('collapsed');
+                wrapper.classList.toggle('section-collapsed', collapsed);
+
+                savedState[folderId] = collapsed;
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+                } catch (e) {
+                    // ignore
+                }
+            });
+        });
+
+        // Glyph Dictionary Search / Filter
+        const searchInput = document.getElementById('glyph-search');
+        const stabilityToggle = document.getElementById('glyph-stability-toggle');
+        const glyphColumns = page.querySelectorAll('.glyph-card-columns .glyph-card-column');
+        const searchClear = document.getElementById('glyph-search-clear');
+
+        const glyphData = Array.prototype.map.call(glyphColumns, function (col) {
+            return {
+                col: col,
+                text: col.textContent.toLowerCase(),
+                stability: (col.dataset.stability || 'all').toLowerCase()
+            };
+        });
+
+        let currentStability = 'all';
+        let searchDebounce = null;
+
+        function applyGlyphFilters() {
+            const query = (searchInput && searchInput.value || '').toLowerCase();
+
+            glyphData.forEach(function (item) {
+                const matchesText = !query || item.text.indexOf(query) !== -1;
+                const matchesStability = (currentStability === 'all') || (item.stability === currentStability);
+                const shouldShow = matchesText && matchesStability;
+
+                item.col.classList.toggle('glyph-card-hidden', !shouldShow);
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                if (searchDebounce) {
+                    clearTimeout(searchDebounce);
+                }
+                searchDebounce = setTimeout(applyGlyphFilters, 120);
+            });
+        }
+        if (searchClear && searchInput) {
+            searchClear.addEventListener('click', function () {
+                searchInput.value = '';
+                applyGlyphFilters();
+            });
+        }
+
+        if (stabilityToggle) {
+            stabilityToggle.addEventListener('click', function (event) {
+                const btn = event.target.closest('.glyph-stability-button');
+                if (!btn) return;
+
+                currentStability = btn.dataset.stability || 'all';
+
+                const buttons = stabilityToggle.querySelectorAll('.glyph-stability-button');
+                buttons.forEach(function (b) {
+                    b.classList.toggle('active', b === btn);
+                });
+
+                applyGlyphFilters();
+            });
+        }
+
+        // Main section nav smooth scroll
+        const sectionPills = page.querySelectorAll('.main-section-pill');
+        sectionPills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                const targetSelector = pill.getAttribute('data-target');
+                if (!targetSelector) return;
+                const targetEl = document.querySelector(targetSelector);
+                if (!targetEl) return;
+                targetEl.scrollIntoView({behavior: 'smooth', block: 'start'});
+            });
+        });
+    });
+</script>
+</body>
+</html>
