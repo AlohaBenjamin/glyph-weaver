@@ -1855,11 +1855,6 @@
             });
         }
 
-        const detailElements = page.querySelectorAll('details');
-        detailElements.forEach(function (detailsEl) {
-            detailsEl.addEventListener('toggle', queueHeightRecalc);
-        });
-
         if (stabilityToggle) {
             stabilityToggle.addEventListener('click', function (event) {
                 const btn = event.target.closest('.glyph-stability-button');
@@ -1875,11 +1870,6 @@
                 applyGlyphFilters();
             });
         }
-
-        const detailElements = page.querySelectorAll('details');
-        detailElements.forEach(function (detailsEl) {
-            detailsEl.addEventListener('toggle', queueHeightRecalc);
-        });
 
         // Main section nav smooth scroll
         const sectionPills = page.querySelectorAll('.main-section-pill');
