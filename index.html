@@ -168,6 +168,21 @@
             border-radius: 12px 12px 0 0;
             padding: 0.65em 1.2em 0.7em 2.4em;
             box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: -10px;
+            height: 16px;
+            border-radius: 0 0 12px 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
         }
 
         .section-heading + .section-block {
@@ -175,6 +190,7 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             border-top: none;
+            padding-top: 1.4em;
         }
 
         /* Glowing inline text styles for Glyphs and Sigils */
@@ -719,16 +735,16 @@
 
         /* animated collapsible sections */
         .section-collapsible {
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            transition: max-height 0.2s ease-out,
-                        opacity 0.16s ease-out;
+            display: block;
+            opacity: 1;
+            transition: opacity 0.16s ease-out, transform 0.16s ease-out;
+            transform: translateY(0);
         }
 
         .section-collapsible.section-collapsed {
-            max-height: 0 !important;
+            display: none;
             opacity: 0;
+            transform: translateY(-6px);
         }
 
     </style>
@@ -1695,15 +1711,7 @@
                 h2.classList.toggle('collapsed', collapsed);
                 toggleBtn.textContent = collapsed ? '+' : '−';
                 sectionNodes.forEach(function (node) {
-                    if (collapsed) {
-                        node.classList.add('section-collapsed');
-                        node.style.maxHeight = '0px';
-                        node.style.opacity = '0';
-                    } else {
-                        node.classList.remove('section-collapsed');
-                        node.style.maxHeight = node.scrollHeight + 'px';
-                        node.style.opacity = '1';
-                    }
+                    node.classList.toggle('section-collapsed', collapsed);
                 });
                 savedState[sectionId] = collapsed;
                 try {
@@ -1711,7 +1719,6 @@
                 } catch (e) {
                     // ignore storage errors
                 }
-                queueHeightRecalc();
             }
 
             // apply initial state via helper so button text stays in sync if needed later
@@ -1774,22 +1781,13 @@
             function setFolderState(collapsed) {
                 folderHeader.classList.toggle('collapsed', collapsed);
                 folderToggleBtn.textContent = collapsed ? '+' : '−';
-                if (collapsed) {
-                    wrapper.classList.add('section-collapsed');
-                    wrapper.style.maxHeight = '0px';
-                    wrapper.style.opacity = '0';
-                } else {
-                    wrapper.classList.remove('section-collapsed');
-                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
-                    wrapper.style.opacity = '1';
-                }
+                wrapper.classList.toggle('section-collapsed', collapsed);
                 savedState[folderId] = collapsed;
                 try {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
                 } catch (e) {
                     // ignore
                 }
-                queueHeightRecalc();
             }
 
             setFolderState(initiallyCollapsedFolder);
@@ -1836,8 +1834,6 @@
 
                 item.col.classList.toggle('glyph-card-hidden', !shouldShow);
             });
-
-            queueHeightRecalc();
         }
 
         if (searchInput) {
@@ -1883,24 +1879,6 @@
             });
         });
 
-        function queueHeightRecalc() {
-            if (typeof requestAnimationFrame === 'function') {
-                requestAnimationFrame(recomputeOpenSectionHeights);
-            } else {
-                setTimeout(recomputeOpenSectionHeights, 0);
-            }
-        }
-
-        function recomputeOpenSectionHeights() {
-            const openSections = page.querySelectorAll('.section-collapsible:not(.section-collapsed)');
-            openSections.forEach(function (el) {
-                el.style.maxHeight = el.scrollHeight + 'px';
-            });
-        }
-
-        window.addEventListener('load', queueHeightRecalc);
-        window.addEventListener('resize', queueHeightRecalc);
-        queueHeightRecalc();
     });
 </script>
 </body>
