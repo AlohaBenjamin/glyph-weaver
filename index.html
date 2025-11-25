@@ -643,21 +643,49 @@
             position: relative;
             padding-left: 32px;
         }
-
         .folder-header {
-            margin-top: 1.8em;
-            margin-bottom: 0.2em;
-            padding: 8px 12px 8px 32px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(133, 76, 255, 0.25), rgba(52, 195, 255, 0.15));
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            font-size: 0.9rem;
+            margin: 2.2em 0 0;
+            padding: 12px 22px 14px 48px;
+            border-radius: 16px 16px 0 0;
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.45), rgba(52, 195, 255, 0.28));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-bottom: none;
+            font-size: 0.92rem;
             font-weight: 600;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: #f7f2ff;
             cursor: pointer;
             position: relative;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.55);
+        }
+
+        .folder-header + .folder-section-wrapper {
+            margin: 0 0 2em;
+            border-radius: 0 0 16px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-top: none;
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.6);
+            background: transparent;
+        }
+
+        .folder-header + .folder-section-wrapper.section-collapsed {
+            margin-bottom: 0;
+            box-shadow: none;
+        }
+
+        .folder-section-wrapper {
+            transition: max-height 0.26s ease-out, opacity 0.18s ease-out, margin 0.26s ease-out;
+        }
+
+        .folder-section-inner {
+            background: radial-gradient(circle at top right, rgba(35, 35, 60, 0.95), rgba(10, 10, 20, 0.94));
+            border-radius: 0 0 16px 16px;
+            padding: 22px 32px 20px;
+        }
+
+        .folder-section-inner > .section-heading:first-child {
+            margin-top: 1em;
         }
 
         .collapse-toggle {
@@ -684,6 +712,11 @@
             background: linear-gradient(135deg, rgba(133, 76, 255, 0.5), rgba(52, 195, 255, 0.4));
         }
 
+        .folder-header .collapse-toggle {
+            left: 16px;
+            background: rgba(8, 8, 24, 0.9);
+        }
+
         /* animated collapsible sections */
         .section-collapsible {
             overflow: hidden;
@@ -698,9 +731,6 @@
             opacity: 0;
         }
 
-        .folder-section-wrapper {
-            /* wrapper that collapses entire folder without touching subsection state */
-        }
     </style>
     <link rel="icon" type="image/png" href="./images/favicon.ico">
 </head>
@@ -1671,8 +1701,7 @@
                         node.style.opacity = '0';
                     } else {
                         node.classList.remove('section-collapsed');
-                        const fullHeight = node.scrollHeight;
-                        node.style.maxHeight = fullHeight + 'px';
+                        node.style.maxHeight = node.scrollHeight + 'px';
                         node.style.opacity = '1';
                     }
                 });
@@ -1682,6 +1711,7 @@
                 } catch (e) {
                     // ignore storage errors
                 }
+                queueHeightRecalc();
             }
 
             // apply initial state via helper so button text stays in sync if needed later
@@ -1721,10 +1751,13 @@
             // Wrap them in a folder wrapper so we can collapse the whole group
             const wrapper = document.createElement('div');
             wrapper.classList.add('folder-section-wrapper', 'section-collapsible');
+            const inner = document.createElement('div');
+            inner.classList.add('folder-section-inner');
+            wrapper.appendChild(inner);
             const firstNode = collectedNodes[0];
             firstNode.parentNode.insertBefore(wrapper, firstNode);
             collectedNodes.forEach(function (node) {
-                wrapper.appendChild(node);
+                inner.appendChild(node);
             });
 
             const initiallyCollapsedFolder = (folderId in savedState)
@@ -1747,8 +1780,7 @@
                     wrapper.style.opacity = '0';
                 } else {
                     wrapper.classList.remove('section-collapsed');
-                    const fullHeight = wrapper.scrollHeight;
-                    wrapper.style.maxHeight = fullHeight + 'px';
+                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
                     wrapper.style.opacity = '1';
                 }
                 savedState[folderId] = collapsed;
@@ -1757,6 +1789,7 @@
                 } catch (e) {
                     // ignore
                 }
+                queueHeightRecalc();
             }
 
             setFolderState(initiallyCollapsedFolder);
@@ -1789,7 +1822,6 @@
                 stability: (col.dataset.stability || 'all').toLowerCase()
             };
         });
-        const glyphColumnsContainer = page.querySelector('.glyph-card-columns');
 
         let currentStability = 'all';
         let searchDebounce = null;
@@ -1804,6 +1836,8 @@
 
                 item.col.classList.toggle('glyph-card-hidden', !shouldShow);
             });
+
+            queueHeightRecalc();
         }
 
         if (searchInput) {
@@ -1821,6 +1855,11 @@
             });
         }
 
+        const detailElements = page.querySelectorAll('details');
+        detailElements.forEach(function (detailsEl) {
+            detailsEl.addEventListener('toggle', queueHeightRecalc);
+        });
+
         if (stabilityToggle) {
             stabilityToggle.addEventListener('click', function (event) {
                 const btn = event.target.closest('.glyph-stability-button');
@@ -1837,6 +1876,11 @@
             });
         }
 
+        const detailElements = page.querySelectorAll('details');
+        detailElements.forEach(function (detailsEl) {
+            detailsEl.addEventListener('toggle', queueHeightRecalc);
+        });
+
         // Main section nav smooth scroll
         const sectionPills = page.querySelectorAll('.main-section-pill');
         sectionPills.forEach(function (pill) {
@@ -1849,6 +1893,14 @@
             });
         });
 
+        function queueHeightRecalc() {
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(recomputeOpenSectionHeights);
+            } else {
+                setTimeout(recomputeOpenSectionHeights, 0);
+            }
+        }
+
         function recomputeOpenSectionHeights() {
             const openSections = page.querySelectorAll('.section-collapsible:not(.section-collapsed)');
             openSections.forEach(function (el) {
@@ -1856,10 +1908,9 @@
             });
         }
 
-        window.addEventListener('load', recomputeOpenSectionHeights);
-        window.addEventListener('resize', function () {
-            recomputeOpenSectionHeights();
-        });
+        window.addEventListener('load', queueHeightRecalc);
+        window.addEventListener('resize', queueHeightRecalc);
+        queueHeightRecalc();
     });
 </script>
 </body>
