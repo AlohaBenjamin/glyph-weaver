@@ -412,6 +412,7 @@
             flex-wrap: wrap;
             gap: 16px;
             align-items: flex-start;
+            min-height: 260px;
         }
 
         .glyph-card-column {
@@ -615,26 +616,13 @@
         .collapsible-header {
             cursor: pointer;
             position: relative;
-        }
-
-        .collapsible-header::after {
-            content: '\25BE'; /* small down triangle */
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        .collapsible-header.collapsed::after {
-            transform: translateY(-50%) rotate(-90deg);
+            padding-left: 26px;
         }
 
         .folder-header {
             margin-top: 1.8em;
             margin-bottom: 0.2em;
-            padding: 8px 12px;
+            padding: 8px 12px 8px 32px;
             border-radius: 12px;
             background: linear-gradient(135deg, rgba(133, 76, 255, 0.25), rgba(52, 195, 255, 0.15));
             border: 1px solid rgba(255, 255, 255, 0.22);
@@ -647,18 +635,28 @@
             position: relative;
         }
 
-        .folder-header::after {
-            content: '\25BE';
+        .collapse-toggle {
             position: absolute;
-            right: 10px;
+            left: 8px;
             top: 50%;
             transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(10, 10, 30, 0.9);
+            color: #f7f2ff;
             font-size: 0.8rem;
-            opacity: 0.8;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
         }
 
-        .folder-header.collapsed::after {
-            transform: translateY(-50%) rotate(-90deg);
+        .collapse-toggle:hover {
+            background: linear-gradient(135deg, rgba(133, 76, 255, 0.5), rgba(52, 195, 255, 0.4));
         }
 
         /* animated collapsible sections */
@@ -1631,23 +1629,16 @@
                 ? !!savedState[sectionId]
                 : true; // default: collapsed
 
-            if (initiallyCollapsed) {
-                h2.classList.add('collapsed');
-                sectionNodes.forEach(function (node) {
-                    node.classList.add('section-collapsed');
-                    node.style.maxHeight = '0px';
-                    node.style.opacity = '0';
-                });
-            } else {
-                sectionNodes.forEach(function (node) {
-                    node.classList.remove('section-collapsed');
-                    node.style.maxHeight = node.scrollHeight + 'px';
-                    node.style.opacity = '1';
-                });
-            }
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'collapse-toggle';
+            toggleBtn.setAttribute('aria-label', 'Toggle section');
+            toggleBtn.textContent = initiallyCollapsed ? '+' : '−';
+            h2.insertBefore(toggleBtn, h2.firstChild);
 
-            h2.addEventListener('click', function () {
-                const collapsed = h2.classList.toggle('collapsed');
+            function setSectionState(collapsed) {
+                h2.classList.toggle('collapsed', collapsed);
+                toggleBtn.textContent = collapsed ? '+' : '−';
                 sectionNodes.forEach(function (node) {
                     if (collapsed) {
                         node.classList.add('section-collapsed');
@@ -1655,19 +1646,34 @@
                         node.style.opacity = '0';
                     } else {
                         node.classList.remove('section-collapsed');
-                        // Force reflow so transition always plays from the current content height
                         const fullHeight = node.scrollHeight;
                         node.style.maxHeight = fullHeight + 'px';
                         node.style.opacity = '1';
                     }
                 });
-
                 savedState[sectionId] = collapsed;
                 try {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
                 } catch (e) {
                     // ignore storage errors
                 }
+            }
+
+            // apply initial state via helper so button text stays in sync if needed later
+            setSectionState(initiallyCollapsed);
+
+            h2.addEventListener('click', function (event) {
+                if (event.target.closest('.collapse-toggle')) {
+                    return; // let the button handler manage it
+                }
+                const collapsed = !h2.classList.contains('collapsed');
+                setSectionState(collapsed);
+            });
+
+            toggleBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                const collapsed = !h2.classList.contains('collapsed');
+                setSectionState(collapsed);
             });
         });
 
@@ -1700,19 +1706,16 @@
                 ? !!savedState[folderId]
                 : true; // default: collapsed
 
-            if (initiallyCollapsedFolder) {
-                folderHeader.classList.add('collapsed');
-                wrapper.classList.add('section-collapsed');
-                wrapper.style.maxHeight = '0px';
-                wrapper.style.opacity = '0';
-            } else {
-                wrapper.classList.remove('section-collapsed');
-                wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
-                wrapper.style.opacity = '1';
-            }
+            const folderToggleBtn = document.createElement('button');
+            folderToggleBtn.type = 'button';
+            folderToggleBtn.className = 'collapse-toggle';
+            folderToggleBtn.setAttribute('aria-label', 'Toggle section');
+            folderToggleBtn.textContent = initiallyCollapsedFolder ? '+' : '−';
+            folderHeader.insertBefore(folderToggleBtn, folderHeader.firstChild);
 
-            folderHeader.addEventListener('click', function () {
-                const collapsed = folderHeader.classList.toggle('collapsed');
+            function setFolderState(collapsed) {
+                folderHeader.classList.toggle('collapsed', collapsed);
+                folderToggleBtn.textContent = collapsed ? '+' : '−';
                 if (collapsed) {
                     wrapper.classList.add('section-collapsed');
                     wrapper.style.maxHeight = '0px';
@@ -1723,13 +1726,28 @@
                     wrapper.style.maxHeight = fullHeight + 'px';
                     wrapper.style.opacity = '1';
                 }
-
                 savedState[folderId] = collapsed;
                 try {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
                 } catch (e) {
                     // ignore
                 }
+            }
+
+            setFolderState(initiallyCollapsedFolder);
+
+            folderHeader.addEventListener('click', function (event) {
+                if (event.target.closest('.collapse-toggle')) {
+                    return; // handled by button listener
+                }
+                const collapsed = !folderHeader.classList.contains('collapsed');
+                setFolderState(collapsed);
+            });
+
+            folderToggleBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                const collapsed = !folderHeader.classList.contains('collapsed');
+                setFolderState(collapsed);
             });
         });
 
@@ -1746,6 +1764,7 @@
                 stability: (col.dataset.stability || 'all').toLowerCase()
             };
         });
+        const glyphColumnsContainer = page.querySelector('.glyph-card-columns');
 
         let currentStability = 'all';
         let searchDebounce = null;
@@ -1803,6 +1822,18 @@
                 if (!targetEl) return;
                 targetEl.scrollIntoView({behavior: 'smooth', block: 'start'});
             });
+        });
+
+        function recomputeOpenSectionHeights() {
+            const openSections = page.querySelectorAll('.section-collapsible:not(.section-collapsed)');
+            openSections.forEach(function (el) {
+                el.style.maxHeight = el.scrollHeight + 'px';
+            });
+        }
+
+        window.addEventListener('load', recomputeOpenSectionHeights);
+        window.addEventListener('resize', function () {
+            recomputeOpenSectionHeights();
         });
     });
 </script>
