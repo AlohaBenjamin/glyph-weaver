@@ -185,6 +185,19 @@
             pointer-events: none;
         }
 
+        .section-heading.collapsed {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-bottom: 0.9em;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .section-heading.collapsed::after {
+            opacity: 0;
+            height: 0;
+            border-top: none;
+        }
+
         .section-heading + .section-block {
             margin-top: 0;
             border-top-left-radius: 0;
@@ -736,15 +749,19 @@
         /* animated collapsible sections */
         .section-collapsible {
             display: block;
+            max-height: 9999px;
             opacity: 1;
-            transition: opacity 0.16s ease-out, transform 0.16s ease-out;
             transform: translateY(0);
+            transition: max-height 0.35s ease, opacity 0.22s ease, transform 0.22s ease;
+            overflow: visible;
         }
 
         .section-collapsible.section-collapsed {
-            display: none;
+            max-height: 0;
             opacity: 0;
-            transform: translateY(-6px);
+            transform: translateY(-8px);
+            overflow: hidden;
+            pointer-events: none;
         }
 
     </style>
