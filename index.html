@@ -9,7 +9,8 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 32px 28px;
+            box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
             background: #121218;
             color: #f5f5ff;
@@ -17,7 +18,7 @@
 
         .page {
             max-width: 1120px;
-            margin: 40px auto;
+            margin: 0 auto;
             padding: 24px 50px 40px;
             background: radial-gradient(circle at top left, #25253a 0, #161621 45%, #101018 100%);
             border-radius: 16px;
@@ -31,7 +32,7 @@
             font-weight: 600;
             letter-spacing: 0.03em;
             color: #f7f2ff;
-            margin-top: 1.8em;
+            margin-top: 1.2em;
             margin-bottom: 0.4em;
         }
 
@@ -125,7 +126,7 @@
             border-radius: 12px;
             background: radial-gradient(circle at top left, rgba(120, 120, 255, 0.18), rgba(5, 5, 15, 0.9));
             border: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 0.65em;
+            margin-bottom: 0.4em;
         }
 
         .grid {
@@ -135,10 +136,14 @@
         }
 
         @media (max-width: 800px) {
+            body {
+                padding: 18px 12px;
+            }
+
             .page {
-                margin: 10px auto 30px;
-                padding: 26px 18px;
-                border-radius: 0;
+                margin: 0 auto;
+                padding: 24px 16px 32px;
+                border-radius: 14px;
             }
 
             .grid {
@@ -225,11 +230,11 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             border-top: none;
-            padding-top: 1.4em;
+            padding-top: 1.05em;
         }
 
         .section-block + .section-heading {
-            margin-top: 0.85em;
+            margin-top: 0.45em;
         }
 
         /* Glowing inline text styles for Glyphs and Sigils */
