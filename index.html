@@ -160,6 +160,23 @@
             color: #fbd38d;
         }
 
+        .section-heading {
+            margin-bottom: 0;
+            background: linear-gradient(135deg, rgba(35, 35, 60, 0.95), rgba(18, 18, 30, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            padding: 0.65em 1.2em 0.7em 2.4em;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .section-heading + .section-block {
+            margin-top: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-top: none;
+        }
+
         /* Glowing inline text styles for Glyphs and Sigils */
         .text-glyph {
             color: #fbd38d;
@@ -704,7 +721,7 @@
 
     <!-- ————————————————————————————————————————— -->
     <div class="folder-header" data-folder-id="folder-class-specs">Class Specifications</div>
-    <h2 id="class-overview"><i class="fa-solid fa-hat-wizard heading-icon" aria-hidden="true"></i>Class Overview</h2>
+    <h2 id="class-overview" class="section-heading"><i class="fa-solid fa-hat-wizard heading-icon" aria-hidden="true"></i>Class Overview</h2>
     <div class="section-block">
         <p><span class="label">Theme</span><br>
             The <strong>Glyphweaver</strong> is a full caster who doesn’t memorize discrete spells. Instead, they wield
@@ -750,7 +767,7 @@
     </div>
 
     <!-- Potency & scaling under Class Specifications -->
-    <h2><i class="fa-solid fa-dice-d20 heading-icon" aria-hidden="true"></i>Potency Dice &amp; Scaling</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-dice-d20 heading-icon" aria-hidden="true"></i>Potency Dice &amp; Scaling</h2>
     <div class="section-block">
         <p><span class="label">Potency Die Progression</span></p>
         <table>
@@ -782,7 +799,7 @@
     </div>
 
     <!-- Class progression -->
-    <h2><i class="fa-solid fa-chart-line heading-icon" aria-hidden="true"></i>Class Progression</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-chart-line heading-icon" aria-hidden="true"></i>Class Progression</h2>
     <div class="section-block">
         <table>
             <tr>
@@ -1038,7 +1055,7 @@
     <!-- ————————————————————————————————————————— -->
     <div class="folder-header" data-folder-id="folder-glyph-mechanics">Glyph Mechanics</div>
 
-    <h2 id="glyph-mechanics"><i class="fa-solid fa-sparkles heading-icon" aria-hidden="true"></i>Glyphs: The Arcane Alphabet</h2>
+    <h2 id="glyph-mechanics" class="section-heading"><i class="fa-solid fa-wand-sparkles heading-icon" aria-hidden="true"></i>Glyphs: The Arcane Alphabet</h2>
     <div class="section-block">
         <p><span class="label">Glyph Categories (Draft)</span></p>
         <ul>
@@ -1087,7 +1104,7 @@
                     class="text-glyph">Beam</span>, <span class="text-glyph">Zone</span>, etc.) in sigils.</p>
     </div>
 
-    <h2><i class="fa-solid fa-scroll heading-icon" aria-hidden="true"></i>Sigils: Constructed Spells</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-scroll heading-icon" aria-hidden="true"></i>Sigils: Constructed Spells</h2>
     <div class="section-block">
         <p><span class="label">Definition</span><br>
             A <strong>sigil</strong> is any deliberate combination of two or more glyphs into a coherent effect. Where a
@@ -1228,7 +1245,7 @@
             temperament fits your world better.</p>
     </div>
 
-    <h2><i class="fa-solid fa-scale-balanced heading-icon" aria-hidden="true"></i>Volatility &amp; Stability Points (SP)</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-scale-balanced heading-icon" aria-hidden="true"></i>Volatility &amp; Stability Points (SP)</h2>
     <div class="section-block">
         <p><span class="label">Volatility (Concept)</span></p>
         <ul>
@@ -1266,7 +1283,7 @@
         <p>Exact skill/stat and thresholds are TBD; the structural idea—roll to stabilize volatile sigils—is fixed.</p>
     </div>
 
-    <h2><i class="fa-solid fa-brain heading-icon" aria-hidden="true"></i>Concentration &amp; Anchoring</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-brain heading-icon" aria-hidden="true"></i>Concentration &amp; Anchoring</h2>
     <div class="section-block">
         <p><span class="label">Focus — Concentration Glyph</span></p>
         <ul>
@@ -1310,7 +1327,7 @@
         </ul>
     </div>
 
-    <h2><i class="fa-solid fa-wand-magic-sparkles heading-icon" aria-hidden="true"></i>Secondary Effects</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-wand-magic-sparkles heading-icon" aria-hidden="true"></i>Secondary Effects</h2>
     <div class="section-block">
         <p><span class="label">Core Rule</span><br>
             Some glyphs define a small, thematic <strong>Secondary Effect</strong> that triggers when that glyph is
@@ -1352,7 +1369,7 @@
             their entries in the Glyph Dictionary using the same pattern.</p>
     </div>
 
-    <h2><i class="fa-solid fa-vial heading-icon" aria-hidden="true"></i>Possible Mechanics (Backlog)</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-vial heading-icon" aria-hidden="true"></i>Possible Mechanics (Backlog)</h2>
     <div class="section-block" style="background:#26262b;border-color:rgba(255,255,255,0.12);">
         <p><span class="label">Systems To Flesh Out</span></p>
         <ul>
@@ -1373,7 +1390,7 @@
 
     <!-- ————————————————————————————————————————— -->
     <div class="folder-header" data-folder-id="folder-glyph-dictionary">Glyph Dictionary</div>
-    <h2 id="glyph-dictionary"><i class="fa-solid fa-book heading-icon" aria-hidden="true"></i>Glyph Dictionary</h2>
+    <h2 id="glyph-dictionary" class="section-heading"><i class="fa-solid fa-book heading-icon" aria-hidden="true"></i>Glyph Dictionary</h2>
     <div class="section-block">
         <p><span class="label">Usage Notes</span><br>
             The dictionary will eventually contain all glyphs. For now, only five are explicitly defined: <strong
@@ -1528,7 +1545,7 @@
     </div>
 
     <!-- Possible glyphs and mechanics at end of Glyph Mechanics -->
-    <h2><i class="fa-solid fa-circle-question heading-icon" aria-hidden="true"></i>Periphary Glyphs</h2>
+    <h2 class="section-heading"><i class="fa-solid fa-circle-question heading-icon" aria-hidden="true"></i>Periphary Glyphs</h2>
     <div class="section-block" style="background:#26262b;border-color:rgba(255,255,255,0.12);">
         <p><span class="label">Known But Undetermined Glyphs</span><br>
             These glyphs are acknowledged as existing in the setting but are not yet mechanically defined beyond their
